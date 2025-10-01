@@ -24,7 +24,7 @@ class CardGenerator {
         this.cardHeaderSecondaryColor = '#7B68EE';
         this.cardPillColor = '#5E82F5';
         this.cardPasswordChipColor = '#7B68EE';
-        this.footerNote = 'Não partilhe esta password.';
+        this.footerNote = '';
         this.footerFontSize = 7;
         this.footerColor = '#94a3b8';
         this.headerHeight = 22; // mm
@@ -92,9 +92,9 @@ class CardGenerator {
         if (nameLength > 24) nameFontSize = 10;
         if (nameLength > 34) nameFontSize = 9;
 
-        let emailFontSize = 9;
-        if (emailLength > 35) emailFontSize = 7.5;
-        if (emailLength > 45) emailFontSize = 6.5;
+        let emailFontSize = 10.5;
+        if (emailLength > 35) emailFontSize = 8.5;
+        if (emailLength > 45) emailFontSize = 7.5;
 
         const cardWidthPt = this.mm(this.cardWidth);
         const cardHeightPt = this.mm(this.cardHeight);
@@ -212,7 +212,7 @@ class CardGenerator {
                     widths: ['*'],
                     body: [[{
                         text: student.Password || '—',
-                        fontSize: 11,
+                        fontSize: 12,
                         bold: true,
                         color: this.cardPasswordColor,
                         alignment: 'center',
@@ -233,11 +233,11 @@ class CardGenerator {
             }
         ];
 
-        const footer = {
+        const footer = this.footerNote ? {
             text: this.footerNote,
             fontSize: this.footerFontSize,
             color: this.footerColor
-        };
+        } : null;
 
         return {
             backgroundCanvas,
@@ -293,16 +293,18 @@ class CardGenerator {
                 stack: cardDef.bodyStack
             });
 
-            content.push({
-                absolutePosition: {
-                    x: absoluteX + cardDef.padding,
-                    y: absoluteY + cardDef.height - cardDef.padding - cardDef.footerOffset
-                },
-                width: cardDef.contentWidth,
-                text: cardDef.footer.text,
-                fontSize: cardDef.footer.fontSize,
-                color: cardDef.footer.color
-            });
+            if (cardDef.footer) {
+                content.push({
+                    absolutePosition: {
+                        x: absoluteX + cardDef.padding,
+                        y: absoluteY + cardDef.height - cardDef.padding - cardDef.footerOffset
+                    },
+                    width: cardDef.contentWidth,
+                    text: cardDef.footer.text,
+                    fontSize: cardDef.footer.fontSize,
+                    color: cardDef.footer.color
+                });
+            }
         });
         
         return content;
@@ -483,7 +485,8 @@ class CardGenerator {
             margin-bottom: 1mm;
         }
         .print-field-value {
-            font-size: 9.5pt;
+            font-size: 11pt;
+            font-weight: 600;
             color: #1f2937;
             white-space: nowrap;
             overflow: hidden;
@@ -491,18 +494,13 @@ class CardGenerator {
         }
         .print-password {
             margin-top: 1mm;
-            font-size: 10pt;
-            font-weight: 600;
+            font-size: 11.5pt;
+            font-weight: 700;
             color: #ffffff;
             background: var(--password-chip);
             text-align: center;
-            padding: 2mm 0;
+            padding: 2.5mm 0;
             border-radius: 2mm;
-        }
-        .print-footer {
-            font-size: 7pt;
-            color: #94a3b8;
-            padding: 0 5mm 4mm;
         }
         .print-instructions {
             font-size: 9pt;
@@ -569,7 +567,6 @@ class CardGenerator {
                     <div class="print-password">${password}</div>
                 </div>
             </div>
-            <div class="print-footer">${this.escapeHtml(this.footerNote)}</div>
         </div>`;
     }
 
@@ -606,11 +603,10 @@ class CardGenerator {
                             <span class="card-preview-chip">${password}</span>
                         </div>
                     </div>
-                    <div class="card-preview-footer">${this.escapeHtml(this.footerNote)}</div>
                 </div>
             `;
         }).join('');
-        
+
         return `<div class="card-preview-grid">${cardsHtml}</div>`;
     }
 
