@@ -8,6 +8,7 @@ class App {
         this.rawData = null;
         this.processedStudents = null;
         this.cardGenerator = new CardGenerator();
+        this.logoDataUrl = null;
         
         this.initializeEventListeners();
     }
@@ -56,6 +57,48 @@ class App {
         // Print button
         document.getElementById('print-btn').addEventListener('click', () => {
             this.openPrintPreview();
+        });
+
+        // Logo upload
+        const logoInput = document.getElementById('logo-input');
+        logoInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) {
+                this.logoDataUrl = null;
+                this.cardGenerator.setLogo(null);
+                this.showLogoPreview(null);
+                if (this.processedStudents) {
+                    this.showPreview();
+                }
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecione um ficheiro de imagem (PNG, SVG, JPG).');
+                logoInput.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.logoDataUrl = e.target.result;
+                this.cardGenerator.setLogo(this.logoDataUrl);
+                this.showLogoPreview(this.logoDataUrl);
+                if (this.processedStudents) {
+                    this.showPreview();
+                }
+            };
+            reader.onerror = () => {
+                alert('Não foi possível ler o logotipo.');
+                logoInput.value = '';
+                this.logoDataUrl = null;
+                this.cardGenerator.setLogo(null);
+                this.showLogoPreview(null);
+                if (this.processedStudents) {
+                    this.showPreview();
+                }
+            };
+            reader.readAsDataURL(file);
         });
 
         // Reset button
@@ -366,6 +409,7 @@ class App {
     showPreview() {
         const preview = document.getElementById('preview');
         preview.innerHTML = this.cardGenerator.createPreviewHTML(this.processedStudents);
+        this.updatePreviewLogos(preview);
     }
 
     /**
@@ -376,7 +420,7 @@ class App {
         
         setTimeout(() => {
             try {
-                const filename = document.getElementById('pdf-filename').value || 'cartoes-login-1ano';
+                const filename = document.getElementById('pdf-filename').value || 'cartoes-login-1ciclo';
                 this.cardGenerator.generatePDF(this.processedStudents, filename);
                 
                 alert('✅ PDF gerado com sucesso! O download deve começar automaticamente.');
@@ -404,6 +448,47 @@ class App {
             alert('Erro ao abrir impressão: ' + error.message);
             console.error(error);
         }
+    }
+
+    /**
+     * Mostra uma miniatura do logo carregado
+     */
+    showLogoPreview(dataUrl) {
+        let preview = document.getElementById('logo-preview');
+        if (!preview) {
+            preview = document.createElement('div');
+            preview.id = 'logo-preview';
+            preview.className = 'logo-preview hidden';
+            const logoOptions = document.querySelector('.logo-options');
+            if (logoOptions) {
+                logoOptions.appendChild(preview);
+            }
+        }
+
+        if (!dataUrl) {
+            preview.innerHTML = '';
+            preview.classList.add('hidden');
+            return;
+        }
+
+        preview.innerHTML = `<img src="${dataUrl}" alt="Logotipo" />`;
+        preview.classList.remove('hidden');
+    }
+
+    /**
+     * Atualiza logos na pré-visualização
+     */
+    updatePreviewLogos(container) {
+        const logoUrl = this.logoDataUrl;
+        container.querySelectorAll('[data-card-logo]').forEach(node => {
+            if (logoUrl) {
+                node.src = logoUrl;
+                node.classList.remove('hidden');
+            } else {
+                node.src = '';
+                node.classList.add('hidden');
+            }
+        });
     }
 
     /**

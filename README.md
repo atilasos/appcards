@@ -1,6 +1,6 @@
-# 🎓 Gerador de Cartões de Login - 1º Ano
+# 🎓 Gerador de Cartões de Login - 1º Ciclo
 
-Aplicação web multiplataforma para gerar PDFs com cartões de login para alunos do 1º ano do ensino básico.
+Aplicação web multiplataforma para gerar cartões de login para alunos do 1º ciclo do ensino básico.
 
 ## ✨ Características
 

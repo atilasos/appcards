@@ -30,6 +30,7 @@ class CardGenerator {
         this.headerHeight = 22; // mm
         this.bodySpacing = 4;   // mm
         this.footerBaseline = 3; // mm
+        this.logoDataUrl = null;
         
         // Cálculo das dimensões dos cartões
         // Largura disponível: 210 - (2 * 10) = 190mm
@@ -51,6 +52,15 @@ class CardGenerator {
      */
     mm(value) {
         return value * this.mmToPoint;
+    }
+
+    /**
+     * Define logotipo para uso nos cartões (data URL)
+     * @param {string|null} dataUrl
+     * @param {string} mimeType
+     */
+    setLogo(dataUrl) {
+        this.logoDataUrl = dataUrl;
     }
 
     /**
@@ -125,16 +135,26 @@ class CardGenerator {
             }
         ];
 
-        const headerColumns = [
-            {
-                width: '*',
-                text: student.displayName || student.Nome || '',
-                fontSize: nameFontSize,
-                bold: true,
-                color: '#ffffff',
-                margin: [0, 0, this.mm(2), 0]
-            }
-        ];
+        const headerColumns = [];
+
+        if (this.logoDataUrl) {
+            headerColumns.push({
+                width: 'auto',
+                image: this.logoDataUrl,
+                fit: [this.mm(14), this.mm(14)],
+                margin: [0, 0, this.mm(3), 0],
+                alignment: 'center'
+            });
+        }
+
+        headerColumns.push({
+            width: '*',
+            text: student.displayName || student.Nome || '',
+            fontSize: nameFontSize,
+            bold: true,
+            color: '#ffffff',
+            margin: [0, 0, this.mm(2), 0]
+        });
 
         if (student.Turma) {
             headerColumns.push({
@@ -293,7 +313,7 @@ class CardGenerator {
      * @param {Array<Object>} students - Array de todos os alunos
      * @param {string} filename - Nome do ficheiro (sem extensão)
      */
-    async generatePDF(students, filename = 'cartoes-login-1ano') {
+    async generatePDF(students, filename = 'cartoes-login-1ciclo') {
         // Dividir alunos em páginas de 8 cartões
         const pages = [];
         for (let i = 0; i < students.length; i += this.cardsPerPage) {
@@ -306,9 +326,9 @@ class CardGenerator {
             pageOrientation: 'portrait',
             pageMargins: [0, 0, 0, 0],
             info: {
-                title: 'Cartões de Login - 1º Ano',
+                title: 'Cartões de Login - 1º Ciclo',
                 author: 'Gerador de Cartões',
-                subject: 'Cartões de login para alunos'
+                subject: 'Cartões de login para alunos do 1º ciclo'
             },
             content: [],
             defaultStyle: {
@@ -416,13 +436,25 @@ class CardGenerator {
             padding: 4mm 5mm;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 4mm;
+            flex-wrap: nowrap;
             min-height: ${headerHeight}mm;
+        }
+        .print-card-logo img {
+            max-height: 14mm;
+            max-width: 18mm;
+            object-fit: contain;
+        }
+        .print-card-logo {
+            display: flex;
+            align-items: center;
+            margin-right: 2mm;
         }
         .print-card-name {
             font-size: 11pt;
             font-weight: 600;
             margin-right: 4mm;
+            flex: 1;
         }
         .print-card-tag {
             background: var(--pill-color);
@@ -431,6 +463,8 @@ class CardGenerator {
             font-size: 8pt;
             font-weight: 600;
             letter-spacing: 0.08em;
+            margin-left: auto;
+            white-space: nowrap;
         }
         .print-card-body {
             padding: 5mm;
@@ -491,12 +525,14 @@ class CardGenerator {
     </div>
     <script>
         window.addEventListener('load', () => {
-            try {
-                window.focus();
-                window.print();
-            } catch (err) {
-                console.error(err);
-            }
+            setTimeout(() => {
+                try {
+                    window.focus();
+                    window.print();
+                } catch (err) {
+                    console.error(err);
+                }
+            }, 150);
         });
     </script>
 </body>
@@ -514,10 +550,12 @@ class CardGenerator {
         const password = this.escapeHtml(student.Password || '—');
         const turma = student.Turma ? this.escapeHtml(student.Turma) : '';
         const tagHtml = turma ? `<div class="print-card-tag">${turma}</div>` : '';
+        const logoHtml = this.logoDataUrl ? `<div class="print-card-logo"><img src="${this.logoDataUrl}" alt="Logotipo" /></div>` : '';
 
         return `
         <div class="print-card">
             <div class="print-card-header">
+                ${logoHtml}
                 <div class="print-card-name">${name}</div>
                 ${tagHtml}
             </div>
@@ -549,10 +587,12 @@ class CardGenerator {
             const password = this.escapeHtml(student.Password || '—');
             const turma = this.escapeHtml(student.Turma || '');
             const tagHtml = turma ? `<div class="card-preview-tag">${turma}</div>` : '';
+            const logoHtml = this.logoDataUrl ? `<img data-card-logo src="${this.logoDataUrl}" alt="Logotipo" class="card-preview-logo">` : '<img data-card-logo class="card-preview-logo hidden" alt="Logotipo">';
             
             return `
                 <div class="card-preview">
                     <div class="card-preview-header">
+                        ${logoHtml}
                         <div class="card-preview-name">${name}</div>
                         ${tagHtml}
                     </div>

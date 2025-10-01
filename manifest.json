@@ -1,7 +1,7 @@
 {
   "name": "Gerador de Cartões de Login",
   "short_name": "Cartões Login",
-  "description": "Gerador de cartões de login para alunos do 1º ano",
+  "description": "Gerador de cartões de login para alunos do 1º ciclo",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#667eea",

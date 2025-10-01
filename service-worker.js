@@ -3,7 +3,7 @@
  * Permite instalação e funcionamento offline
  */
 
-const CACHE_NAME = 'cartoes-login-v2';
+const CACHE_NAME = 'cartoes-login-v3';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -12,6 +12,8 @@ const urlsToCache = [
   '/name-processor.js',
   '/card-generator.js',
   '/icon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',

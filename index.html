@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Gerador de Cartões de Login para Alunos do 1º Ano">
+    <meta name="description" content="Gerador de Cartões de Login para alunos do 1º ciclo">
     <meta name="theme-color" content="#4A90E2">
-    <title>Cartões de Login - 1º Ano</title>
+    <title>Cartões de Login - 1º Ciclo</title>
     
     <!-- Google Fonts: Poppins (similar to Century Gothic) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,7 +19,7 @@
     <div class="container">
         <header>
             <h1>🎓 Gerador de Cartões de Login</h1>
-            <p class="subtitle">Para alunos do 1º ano</p>
+            <p class="subtitle">Para alunos do 1º ciclo</p>
         </header>
 
         <main>
@@ -73,7 +73,13 @@
 
                 <div class="output-options">
                     <label for="pdf-filename">Nome do ficheiro PDF:</label>
-                    <input type="text" id="pdf-filename" value="cartoes-login-1ano" placeholder="cartoes-login-1ano">
+                    <input type="text" id="pdf-filename" value="cartoes-login-1ciclo" placeholder="cartoes-login-1ciclo">
+                </div>
+
+                <div class="logo-options">
+                    <label for="logo-input">Logotipo da escola (PNG/SVG):</label>
+                    <input type="file" id="logo-input" accept=".png,.svg,.jpg,.jpeg">
+                    <p class="logo-hint">Opcional. Será incluído na pré-visualização, impressão e PDF.</p>
                 </div>
 
                 <button id="generate-btn" class="btn btn-success">🎨 Gerar PDF</button>
