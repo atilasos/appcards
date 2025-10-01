@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gerador de Cartões de Login para Alunos do 1º Ano">
+    <meta name="theme-color" content="#4A90E2">
+    <title>Cartões de Login - 1º Ano</title>
+    
+    <!-- Google Fonts: Poppins (similar to Century Gothic) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Gerador de Cartões de Login</h1>
+            <p class="subtitle">Para alunos do 1º ano</p>
+        </header>
+
+        <main>
+            <!-- Step 1: Upload File -->
+            <section class="card" id="upload-section">
+                <h2>📁 Passo 1: Carregar Ficheiro</h2>
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📤</div>
+                    <p>Arraste o ficheiro CSV ou Excel aqui</p>
+                    <p class="upload-hint">ou clique para selecionar</p>
+                    <input type="file" id="file-input" accept=".csv,.xlsx,.xls" hidden>
+                </div>
+                <div id="file-info" class="file-info hidden"></div>
+            </section>
+
+            <!-- Step 2: Map Columns -->
+            <section class="card hidden" id="mapping-section">
+                <h2>🗺️ Passo 2: Mapear Colunas</h2>
+                <p class="info-text">Selecione qual coluna corresponde a cada informação:</p>
+                <div class="mapping-grid">
+                    <div class="mapping-item">
+                        <label for="col-nome">Nome Completo:</label>
+                        <select id="col-nome" class="column-select"></select>
+                    </div>
+                    <div class="mapping-item">
+                        <label for="col-turma">Turma:</label>
+                        <select id="col-turma" class="column-select"></select>
+                    </div>
+                    <div class="mapping-item">
+                        <label for="col-email">Email:</label>
+                        <select id="col-email" class="column-select"></select>
+                    </div>
+                    <div class="mapping-item">
+                        <label for="col-password">Password:</label>
+                        <select id="col-password" class="column-select"></select>
+                    </div>
+                </div>
+                <button id="process-btn" class="btn btn-primary">Processar Dados</button>
+            </section>
+
+            <!-- Step 3: Preview and Generate -->
+            <section class="card hidden" id="preview-section">
+                <h2>👁️ Passo 3: Pré-visualizar e Gerar</h2>
+                <div id="stats" class="stats-bar"></div>
+                <div id="errors" class="error-box hidden"></div>
+                
+                <div class="preview-container">
+                    <h3>Pré-visualização (Página 1)</h3>
+                    <div id="preview" class="preview-area"></div>
+                </div>
+
+                <div class="output-options">
+                    <label for="pdf-filename">Nome do ficheiro PDF:</label>
+                    <input type="text" id="pdf-filename" value="cartoes-login-1ano" placeholder="cartoes-login-1ano">
+                </div>
+
+                <button id="generate-btn" class="btn btn-success">🎨 Gerar PDF</button>
+                <button id="print-btn" class="btn btn-outline">🖨️ Imprimir diretamente</button>
+                <button id="reset-btn" class="btn btn-secondary">🔄 Começar de Novo</button>
+            </section>
+        </main>
+
+        <footer>
+            <p>💙 Desenvolvido para educação - 2025</p>
+        </footer>
+    </div>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>A processar...</p>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="name-processor.js"></script>
+    <script src="card-generator.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

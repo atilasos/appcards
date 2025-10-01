@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Ícones PWA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #4A90E2;
+            text-align: center;
+        }
+        .icon-preview {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        button {
+            background: linear-gradient(135deg, #4A90E2, #7B68EE);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            font-weight: 600;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+        .instructions {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #4A90E2;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Gerador de Ícones PWA</h1>
+        <p style="text-align: center; color: #666;">
+            Gere os ícones necessários para a aplicação PWA
+        </p>
+
+        <div class="icon-preview">
+            <div>
+                <canvas id="icon192" width="192" height="192"></canvas>
+                <p style="text-align: center;"><strong>192x192</strong></p>
+            </div>
+            <div>
+                <canvas id="icon512" width="512" height="512"></canvas>
+                <p style="text-align: center;"><strong>512x512</strong></p>
+            </div>
+        </div>
+
+        <button onclick="downloadIcon(192)">⬇️ Download icon-192.png</button>
+        <button onclick="downloadIcon(512)">⬇️ Download icon-512.png</button>
+        <button onclick="downloadBoth()">⬇️ Download Ambos</button>
+
+        <div class="instructions">
+            <h3>📋 Instruções</h3>
+            <ol>
+                <li>Clique em "Download Ambos" para obter os dois ícones</li>
+                <li>Guarde os ficheiros <code>icon-192.png</code> e <code>icon-512.png</code></li>
+                <li>Coloque-os na mesma pasta da aplicação</li>
+                <li>A aplicação PWA está pronta para instalação!</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Desenhar ícone no canvas
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Scale factor
+            const scale = size / 512;
+            
+            // Card
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 8 * scale;
+            roundRect(ctx, 80*scale, 140*scale, 352*scale, 232*scale, 20*scale);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Lines
+            ctx.fillStyle = '#4A90E2';
+            roundRect(ctx, 120*scale, 180*scale, 200*scale, 16*scale, 8*scale);
+            ctx.fill();
+            
+            ctx.fillStyle = '#666';
+            roundRect(ctx, 120*scale, 220*scale, 260*scale, 12*scale, 6*scale);
+            ctx.fill();
+            
+            ctx.fillStyle = '#333';
+            roundRect(ctx, 120*scale, 250*scale, 180*scale, 14*scale, 7*scale);
+            ctx.fill();
+            
+            // Graduation cap
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(380*scale, 300*scale, 40*scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#333';
+            ctx.beginPath();
+            ctx.moveTo(380*scale, 260*scale);
+            ctx.lineTo(340*scale, 280*scale);
+            ctx.lineTo(420*scale, 280*scale);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Tassel
+            ctx.fillRect(415*scale, 262*scale, 8*scale, 35*scale);
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(419*scale, 300*scale, 6*scale, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Helper para desenhar retângulos arredondados
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+        
+        // Download função
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`icon${size}`);
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        function downloadBoth() {
+            downloadIcon(192);
+            setTimeout(() => downloadIcon(512), 500);
+        }
+        
+        // Inicializar
+        window.onload = () => {
+            drawIcon(document.getElementById('icon192'));
+            drawIcon(document.getElementById('icon512'));
+        };
+    </script>
+</body>
+</html>
+

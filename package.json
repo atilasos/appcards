@@ -1,0 +1,26 @@
+{
+  "name": "cartoes-login-1ciclo",
+  "version": "1.0.0",
+  "description": "Gerador de cartões de login para alunos do 1º ciclo",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx http-server -p 8000 -o"
+  },
+  "keywords": [
+    "education",
+    "cards",
+    "pdf",
+    "pwa",
+    "school",
+    "students",
+    "login"
+  ],
+  "author": "Desenvolvido para educação",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seuuser/appcards"
+  }
+}
+
